@@ -1,0 +1,51 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    .room-container{
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+</style>
+
+<div class="room-container">
+    <div>
+        <h3>{{room.name}}   {{room.created|timesince}} ago</h3>
+        <span>HOSTED BY <a href="{% url 'user-profile' room.host.id %}">@{{room.host}}</a></span>
+        <p>
+            {{room.description}}
+        </p>
+    
+        <div>
+            <h3>Conversations</h3>
+            <hr>
+            {% for room_message in room_messages %}
+            <span><a href="{% url 'user-profile' room_message.user.id %}">@{{room_message.user}}</a>   {{room_message.created|timesince}} ago</span>
+            <p>{{room_message.body}}</p>
+            <hr>
+            {% endfor %}
+    
+            <form action="" method="post">
+    
+                {% csrf_token %}
+                
+                <input type="text" name="room_message" placeholder="Write your comments here..">
+                
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <h3>Participants</h3>
+        <hr>
+        {% for participant in participants %}
+            <div>
+                <a href="{% url 'user-profile' participant.id %}">@{{participant}}</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}
